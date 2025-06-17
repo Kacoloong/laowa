@@ -1,0 +1,4 @@
+#!/usr/bin/zsh
+
+# LD_LIBRARY_PATH=/opt/gurobi/linux64/lib python3.11 hash_analysis.py
+python ./hash_analysis.py

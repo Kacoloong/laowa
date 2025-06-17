@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# 获取脚本所在路径
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+
+# 退出时清理
+trap 'kill $(jobs -p)' EXIT
+
+cd "$SCRIPT_DIR/vue-frontend" && npm run serve > $SCRIPT_DIR/frontend.log 2>&1 &
+
+cd "$SCRIPT_DIR" && python ./app.py > $SCRIPT_DIR/backend.log 2>&1 &
+
+wait

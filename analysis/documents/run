@@ -1,0 +1,2 @@
+#!/bin/sh
+pandoc main.md -o output.pdf --toc --number-sections -V toc-title="目录" -V title="面向字节的杂凑密码设计方案" -V mainfont="TimesNewRomanPSMT" -V CJKmainfont="SimSun" -V author="胡泓震" --pdf-engine=xelatex --template=/home/hhz/.config/nvim/templates/pandoc.latex
