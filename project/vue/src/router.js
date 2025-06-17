@@ -8,6 +8,7 @@ import ByteMDS from './views/ByteMDS.vue';
 import ByteAlgorithm from './views/ByteAlgorithm.vue'
 import DiffCollision from './views/DifferentialCollision.vue';
 import MitmAnalysis from './views/MitMAnalysis.vue';
+import HashCall from './views/HashCall.vue';
 
 // import UserLogin from './components/UserLogin.vue';  // 导入 UserLogin 组件
 
@@ -56,6 +57,11 @@ const routes = [
         path: '/mitm-analysis',
         name: 'MitmAnalysis',
         component: MitmAnalysis,
+    },
+    {
+        path: '/hash-call',
+        name: 'HashCall',
+        component: HashCall,
     }
 
     // {

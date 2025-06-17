@@ -733,7 +733,7 @@ def calculate_active_sbox_bytes():
     round = data.get('round')
     time.sleep(1.1 ** ( round) + 1)
     if round > 14:
-        return jsonify({'msg': '生成超时', 'code': 104, 'data': {})
+        return jsonify({'msg': '生成超时', 'code': 104, 'data': {}})
     return jsonify({'msg': 'ok', 'code': 0, 'data': {'count': active_sboxes[round]}})
 
 
@@ -751,16 +751,16 @@ def sbox_generate():
         if not sbox_width:
             return make_response(103, "缺少必要参数: sbox_width", None)
 
-        if sbox_width == '4':
+        if sbox_width == 4:
             sbox = [[6, 8, 13, 11, 12, 1, 2, 14, 10, 15, 0, 5, 7, 4, 9, 3],
                     [11, 13, 5, 14, 0, 10, 12, 3, 2, 4, 15, 8, 7, 9, 1, 6],
                     [10, 4, 3, 14, 1, 7, 8, 11, 0, 15, 12, 9, 13, 2, 6, 5]]
-            return make_response(0, "success", {"bitwidth": 4, "data": sbox})
+            return make_response(0, "ok", {"bitwidth": 4, "data": sbox})
         else:
             sbox = [[2, 14, 21, 0, 25, 15, 26, 31, 24, 17, 4, 30, 23, 9, 5, 6, 19, 1, 7, 28, 18, 8, 20, 13, 22, 11, 29, 3, 16, 12, 27, 10],
                     [13, 3, 4, 23, 30, 14, 5, 29, 9, 28, 19, 27, 18, 17, 0, 10, 22, 25, 31, 6, 21, 8, 26, 20, 16, 2, 12, 24, 15, 7, 11, 1],
                     [1, 17, 4, 22, 21, 10, 27, 14, 2, 29, 19, 24, 30, 26, 5, 13, 11, 20, 28, 3, 12, 15, 18, 9, 7, 0, 31, 6, 16, 23, 8, 25]]
-            return make_response(0, "success", {"bitwidth": 5, "data": sbox})
+            return make_response(0, "ok", {"bitwidth": 5, "data": sbox})
             
     except Exception as e:
         return make_response(104, f"系统内部错误: {str(e)}", None)
@@ -794,7 +794,7 @@ def hash_generate():
             return make_response(103, "缺少必要参数", None)
         
         generate_bit_hash(data)
-        return make_response(0, "处理正常", None)
+        return make_response(0, "ok", None)
         
     except Exception as e:
         return make_response(104, f"系统内部错误", None)
@@ -808,11 +808,12 @@ def calculate_hash():
         data = request.get_json()
         print(data)
         if data['type'] == 1:
-            if not data:
-                return make_response(102, "请求参数为空", None)
+            target_path = "../src/design1_bit/bithash.py"
+            if not os.path.exists(target_path):
+                return make_response(103,"缺少必要参数", None)
                 
             if 'message' not in data:
-                return make_response(103, "缺少必要参数", None)
+                return make_response(102, "请求参数为空", None)
             
             result = sponge(data['message'])
             return make_response(0, "处理正常", {"hash": result})
@@ -838,57 +839,6 @@ def calculate_hash():
             
     except Exception as e:
         return make_response(104, f"系统内部错误", None)
-
-@app.route('/api/hash_function/bit/calculate-active-sbox', methods=['POST'])
-def calculate_active_sbox():
-    try:
-        if not request.is_json:
-            return make_response(101, "请求参数异常", None)
-            
-        data = request.get_json()
-        if not data:
-            return make_response(102, "请求参数为空", None)
-            
-        if 'rounds' not in data:
-            return make_response(103, "缺少必要参数: rounds", None)
-            
-        round_num = int(data['rounds'])
-        if not 1 <= round_num <= 6:
-            return make_response(101, "参数范围异常: rounds需在1-6之间", None)
-            
-        result = [1, 4, 9, 46, 125, 269]
-        return make_response(0, "计算活跃S盒成功", {"count": result[round_num - 1]})
-        
-    except ValueError:
-        return make_response(101, "参数类型错误: rounds需为整数", None)
-    except Exception as e:
-        return make_response(104, f"系统内部错误: {str(e)}", None)
-
-@app.route('/api/hash_function/bit/search-differential-prob', methods=['POST'])
-def search_differential_prob():
-    try:
-        if not request.is_json:
-            return make_response(101, "请求参数异常", None)
-            
-        data = request.get_json()
-        if not data:
-            return make_response(102, "请求参数为空", None)
-            
-        if 'rounds' not in data:
-            return make_response(103, "缺少必要参数: rounds", None)
-            
-        round_num = int(data['rounds'])
-        if not 1 <= round_num <= 4:
-            return make_response(101, "参数范围异常: rounds需在1-4之间", None)
-            
-        result = [2, 10.25, 22.59, 146.55]
-        return make_response(0, "搜索差分概率成功", {"exponent": result[round_num - 1]})
-        
-    except ValueError:
-        return make_response(101, "参数类型错误: rounds需为整数", None)
-    except Exception as e:
-        return make_response(104, f"系统内部错误: {str(e)}", None)
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run a simple Flask server.')

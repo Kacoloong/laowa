@@ -20,8 +20,8 @@ import SideBar from "@/components/SideBar.vue";
                                         <span style="font-size: 14px;">S盒的位宽:</span>
                                     </template>
                                     <el-select v-model="sbox_width" placeholder="请选择S盒的位宽" style="width: 100%; font-size: 14px; height: 36px;">
-                                        <el-option label="4bit" value="4bit"></el-option>
-                                        <el-option label="5bit" value="5bit"></el-option>
+                                        <el-option label="4" value="4"></el-option>
+                                        <el-option label="5" value="5"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </el-col>
@@ -163,14 +163,14 @@ import SideBar from "@/components/SideBar.vue";
 export default {
    data() {
       return {
-          sbox_width: '',
-          sbox_bijection: '',
-          sbox_fixed_point: '',
-          sbox_diff: '',
-          sbox_line: '',
-          sbox_diff_freq: '',
-          sbox_line_freq: '',
-          sbox_bibo: '',
+          sbox_width: 4,
+          sbox_bijection: '是',
+          sbox_fixed_point: '是',
+          sbox_diff: 4,
+          sbox_line: 4,
+          sbox_diff_freq: 8,
+          sbox_line_freq: 8,
+          sbox_bibo: 2,
           loading: false,
           appear: false,
           error: false,
@@ -183,11 +183,11 @@ export default {
             this.sbox_width,    
             this.sbox_bijection,  
             this.sbox_fixed_point,    
-            this.sbox_diff.trim(),
-            this.sbox_line.trim(),
-            this.sbox_diff_freq.trim(), 
-            this.sbox_line_freq.trim(),
-            this.sbox_bibo.trim()
+            this.sbox_diff,
+            this.sbox_line,
+            this.sbox_diff_freq, 
+            this.sbox_line_freq,
+            this.sbox_bibo
         ].every(field => !!field);
       }
     },
@@ -215,20 +215,26 @@ export default {
         this.error = false;
         this.loading = true;
         try {
+          const width = parseInt(this.sbox_width);
+          const diff = parseInt(this.sbox_diff) || 0;
+          const line = parseInt(this.sbox_line) || 0;
+          const diffFreq = parseInt(this.sbox_diff_freq) || 0;
+          const lineFreq = parseInt(this.sbox_line_freq) || 0;
+          const bibo = parseInt(this.sbox_bibo) || 0;
           const response = await fetch('http://127.0.0.1:5000/api/hash_function/sbox-generate', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              sbox_width: this.sbox_width[0],
+              sbox_width: width,
               sbox_bijection: this.sbox_bijection,
               sbox_fixed_point: this.sbox_fixed_point,
-              sbox_diff: this.sbox_diff,
-              sbox_line: this.sbox_line,
-              sbox_diff_freq: this.sbox_diff_freq,
-              sbox_line_freq: this.sbox_line_freq,
-              sbox_bibo: this.sbox_bibo,
+              sbox_diff: diff,
+              sbox_line: line,
+              sbox_diff_freq: diffFreq,
+              sbox_line_freq: lineFreq,
+              sbox_bibo: bibo,
             }),
           });
           const temp = await response.json();

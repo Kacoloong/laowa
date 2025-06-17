@@ -34,15 +34,15 @@ def getConstant(start, end, length):
     return result
 
 def generate_bit_hash(params):
-    b = int(params['param_b'])
-    c = int(params['param_c'])
+    b = params['param_b']
+    c = params['param_c']
     r = b - c
-    md = int(params['param_hlen'])
-    m = int(params['param_m'])
+    md = params['param_hlen']
+    m = params['param_m']
     n = b // m
-    round = int(params['param_r'])
-    num = 4 if params['param_w'] == '4bit' else 5
-    Sbox = [int(char, 16) for char in params['sboxMatrix']]
+    round = params['param_r']
+    num = 4 if params['param_w'] == 4 else 5
+    Sbox = params['sboxMatrix']
     iv = (int)(md << 52) + (int)(r << 40) + (int)(m << 28) + (int)(n << 16)
     rc = getConstant(2025, (int)(2025+19*m/(num)-1), 19)
 

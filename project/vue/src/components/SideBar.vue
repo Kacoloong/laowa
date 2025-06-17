@@ -32,6 +32,7 @@
       <el-menu-item index="3-2-1" @click="$router.push('/byte-mds')">生成MDS矩阵</el-menu-item>
       <el-menu-item index="3-2-2" @click="$router.push('/byte-algorithm')">具体杂凑算法</el-menu-item>
     </el-sub-menu>
+    <el-menu-item index="3-3" @click="$router.push('/hash-call')">杂凑密码调用</el-menu-item>
   </el-sub-menu>
   </el-menu>
 
