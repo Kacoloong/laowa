@@ -214,9 +214,8 @@ def sponge(pt):  #整体海绵结构(明文为输入，哈希摘要值为输出)
     return hex_output
 """.format(iv = iv, m = m, n = n)
 
-    output_path = "/home/ninini/51Hash/backend/backend/src/design1_bit/bithash.py"
+    output_path = '../bithash.py'
 
-    # 强制覆盖写入
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(written_code)
-        f.close()
+    
